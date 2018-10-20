@@ -1,20 +1,29 @@
-class Enemy {
-    constructor() {
-        this.sprite = "images/enemy-bug.png";
-        this.x = 5;
-        this.y = 4;
-        this.name = "tom";
+class Sprite {
+    constructor(sprite, x, y){
+        this.sprite = sprite;
+        this.x = x;
+        this.y = y;
+    }
+    render(resources, ctx){
+        ctx.drawImage(resources.get(this.sprite), this.x, this.y);
+    }
+}
+
+
+class Enemy extends Sprite{
+    constructor(sprite, x, y) {
+        super(sprite, x, y);
+        // this.sprite = sprite;
+        // this.x = x;
+        // this.y = y;
+        this.name = "Tom";
     }
 
     update(timeDelta){
         //this.x = (this.x + 1)  * timeDelta;
         //this.y;
-        console.log("td: ", timeDelta);
     }
 
-    render(){
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    }
 }
 // read about ctx
 //figure out the dimensions of the ctx canvas
@@ -34,14 +43,14 @@ class Enemy {
 //when the player gets to the water, he needs to 
 //be placed back on the grass
 //figure out collisions of bug and player
-//when player dies, he needs to move back to the gras
+//when player dies, he needs to move back to the grass
 
-
-class Player {
-    constructor() {
-        this.sprite = "images/char-boy.png";
-        this.x = 100;
-        this.y = 70;
+class Player extends Sprite {
+    constructor(sprite, x, y) {
+        super(sprite, x, y);
+        // this.sprite = "images/char-boy.png";
+        // this.x = 100;
+        // this.y = 70;
         this.name = "chester";
     }
 
@@ -50,21 +59,23 @@ class Player {
         //this.y;
     }
 
-    render(){
-        // console.log("here");
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-        console.log(this.name);
-    }
-
     handleInput(){
         //keyboard junk here
     }
 }
 
-let myEnemy = new Enemy();
-let player = new Player();
+let canvas = document.createElement('canvas');
+let ctx = canvas.getContext('2d');
+
+document.body.appendChild(canvas);
+
+
+let myEnemy = new Enemy("images/enemy-bug.png", 0, 0);
+let player = new Player("images/char-boy.png", 100, 70);
 console.log(player.x);
 console.log(player.y);
 
 let allEnemies = [];
 allEnemies.push(myEnemy);
+
+let engine = new Engine(Resources, canvas, ctx, allEnemies, player);
