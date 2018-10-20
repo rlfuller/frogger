@@ -14,7 +14,7 @@
  */
 
 class Engine {
-    constructor(resources, canvas, ctx, allEnemies, player) {
+    constructor(canvas, ctx, allEnemies, player) {
     /* Predefine the variables we'll be using within this scope,
      * create the canvas element, grab the 2D context for that canvas
      * set the canvas elements height/width and add it to the DOM.
@@ -25,7 +25,8 @@ class Engine {
         this.lastTime = null;
         this.canvas.width = 505;
         this.canvas.height = 606;
-        this.resources = resources;
+        this.blockWidth = 101;
+        this.blockHeight = 83;
         this.allEnemies = allEnemies;
         this.player = player;
 
@@ -33,14 +34,14 @@ class Engine {
         * draw our game level. Then set init as the callback method, so that when
         * all of these images are properly loaded our game will start.
         */
-        resources.load([
+        Resources.load([
             'images/stone-block.png',
             'images/water-block.png',
             'images/grass-block.png',
             'images/enemy-bug.png',
             'images/char-boy.png'
         ]);
-        resources.onReady(() => this.init());
+        Resources.onReady(() => this.init());
     }
 
     /* This function serves as the kickoff point for the game loop itself
@@ -80,6 +81,8 @@ class Engine {
     init() {
         this.reset();
         this.lastTime = Date.now();
+        //set the initial starting positions of the enemies and players
+    
         this.main();
     }
 
@@ -149,7 +152,7 @@ class Engine {
                  * so that we get the benefits of caching these images, since
                  * we're using them over and over.
                  */
-                this.ctx.drawImage(this.resources.get(rowImages[row]), col * 101, row * 83);
+                this.ctx.drawImage(Resources.get(rowImages[row]), col * this.blockWidth, row * this.blockHeight);
             }
         }
 
@@ -165,11 +168,10 @@ class Engine {
          * the render function you have defined.
          */
         this.allEnemies.forEach((enemy) => {
-            console.log(this);
-            enemy.render(this.resources, this.ctx);
+            enemy.render(this.ctx);
         });
 
-        this.player.render(this.resources, this.ctx);
+        this.player.render(this.ctx);
     }
 
     /* This function does nothing but it could have been a good place to
@@ -178,6 +180,8 @@ class Engine {
      */
     reset() {
         // noop
+        // console.log("foo", Resources.get(this.player.sprite).height, Resources.get(this.player.sprite).width);
+        this.player.setInitialLocation(this.blockWidth, this.blockHeight);
     }
 
 }

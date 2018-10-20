@@ -1,11 +1,12 @@
 class Sprite {
-    constructor(sprite, x, y){
+    constructor(sprite, x = 0, y = 0){
         this.sprite = sprite;
         this.x = x;
         this.y = y;
     }
-    render(resources, ctx){
-        ctx.drawImage(resources.get(this.sprite), this.x, this.y);
+
+    render(ctx){
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 }
 
@@ -54,13 +55,26 @@ class Player extends Sprite {
         this.name = "chester";
     }
 
-    update(timeDelta){
+    update(){
         //this.x = (this.x + 1)  * timeDelta;
         //this.y;
     }
 
     handleInput(){
         //keyboard junk here
+    }
+
+    setInitialLocation(blockWidth, blockHeight){
+        //squares are 101, 83
+        let img = Resources.get(this.sprite);
+        let width = img.width;
+        let height = img.height;
+        console.log(width, height, "player");
+        // this.x = canvasWidth / 2;
+        // this.y = canvasHeight - height;
+        console.log(this.x, this.y, "hello");
+        this.y = blockHeight * 5 - 20;
+        this.x = 2 * blockWidth;
     }
 }
 
@@ -69,13 +83,26 @@ let ctx = canvas.getContext('2d');
 
 document.body.appendChild(canvas);
 
-
-let myEnemy = new Enemy("images/enemy-bug.png", 0, 0);
-let player = new Player("images/char-boy.png", 100, 70);
+console.log(canvas.width, canvas.height);
+let myEnemy = new Enemy("images/enemy-bug.png", 252, 256);
+let player = new Player("images/char-boy.png");
 console.log(player.x);
 console.log(player.y);
 
 let allEnemies = [];
 allEnemies.push(myEnemy);
 
-let engine = new Engine(Resources, canvas, ctx, allEnemies, player);
+let engine = new Engine(canvas, ctx, allEnemies, player);
+
+// This listens for key presses and sends the keys to your
+// Player.handleInput() method. You don't need to modify this.
+document.addEventListener('keyup', function(e) {
+    var allowedKeys = {
+        37: 'left',
+        38: 'up',
+        39: 'right',
+        40: 'down'
+    };
+
+    player.handleInput(allowedKeys[e.keyCode]);
+});
