@@ -1,46 +1,70 @@
-// Enemies our player must avoid
-var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
+class Enemy {
+    constructor() {
+        this.sprite = "images/enemy-bug.png";
+        this.x = 5;
+        this.y = 4;
+        this.name = "tom";
+    }
 
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
-};
+    update(timeDelta){
+        //this.x = (this.x + 1)  * timeDelta;
+        //this.y;
+        console.log("td: ", timeDelta);
+    }
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-};
+    render(){
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+}
+// read about ctx
+//figure out the dimensions of the ctx canvas
+//figure out the starting position of bug
+//bug needs to start on the bricks, what are the 
+//x,y of the bricks
+//figure out the starting position of the player
+//player needs to start on the grass
+//figure out where the water starts
+//need to figure out how to capture player clicks and 
+//move the player
+//maybe get rid of hte curser
+//figure out the timedelta and how to move
+//these stupid sprite things
+//when the bugs get to the edge of thectx, they need
+//to move back tothe beginning of the ctx
+//when the player gets to the water, he needs to 
+//be placed back on the grass
+//figure out collisions of bug and player
+//when player dies, he needs to move back to the gras
 
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+class Player {
+    constructor() {
+        this.sprite = "images/char-boy.png";
+        this.x = 100;
+        this.y = 70;
+        this.name = "chester";
+    }
 
+    update(timeDelta){
+        //this.x = (this.x + 1)  * timeDelta;
+        //this.y;
+    }
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+    render(){
+        // console.log("here");
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+        console.log(this.name);
+    }
 
+    handleInput(){
+        //keyboard junk here
+    }
+}
 
+let myEnemy = new Enemy();
+let player = new Player();
+console.log(player.x);
+console.log(player.y);
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
-    };
-
-    player.handleInput(allowedKeys[e.keyCode]);
-});
+let allEnemies = [];
+allEnemies.push(myEnemy);
