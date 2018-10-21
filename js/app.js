@@ -60,21 +60,66 @@ class Player extends Sprite {
         //this.y;
     }
 
-    handleInput(){
+    handleInput(keycode){
         //keyboard junk here
+        console.log("klsdjf", keycode);
+        //keycodes, up, down, left, right
+        if (keycode == "up"){
+            this.y = this.y - engine.blockHeight;
+            //check if we are in the water, if so, reset to the grass
+            console.log(this.y);
+            if (this.y <= 0){
+                this.y = engine.blockHeight * 5 - 20
+                // this.setInitialLocation(this.x, engine.blockHeight);
+            }
+        }
+
+        if (keycode == "down"){
+            this.y = this.y + engine.blockHeight;
+            //make sure user cannot go beyond the first row of grass
+            if (this.y >= engine.blockHeight * 6 - engine.blockHeight){
+                this.y = engine.blockHeight * 5 - 20;
+                // this.setInitialLocation(engine.blockWidth, engine.blockHeight);
+            }
+        }
+
+        if (keycode == "left") {
+            this.x = this.x - engine.blockWidth;
+            //make sure user cannot go to the left of the initial block
+            if (this.x < 0){
+                this.x = 0;
+            }
+        }
+
+        if (keycode == "right") {
+            this.x = this.x + engine.blockWidth;
+            //make sure user cannot go to the right of the end
+            //of the 5th column
+            if (this.x >= engine.blockWidth * 5){
+                this.x = engine.blockWidth * 4;
+                console.log(engine.canvas.width);
+                console.log("help", this.x, engine.blockWidth * 5);
+            }
+        }
     }
 
     setInitialLocation(blockWidth, blockHeight){
         //squares are 101, 83
-        let img = Resources.get(this.sprite);
-        let width = img.width;
-        let height = img.height;
-        console.log(width, height, "player");
-        // this.x = canvasWidth / 2;
-        // this.y = canvasHeight - height;
-        console.log(this.x, this.y, "hello");
+        // let img = Resources.get(this.sprite);
+        // let width = img.width;
+        // let height = img.height;
+        // console.log(width, height, "player");
+        // // this.x = canvasWidth / 2;
+        // // this.y = canvasHeight - height;
+        // console.log(this.x, this.y, "hello");
+
+        //account for the buffer of grass on the bottom of the first row
         this.y = blockHeight * 5 - 20;
-        this.x = 2 * blockWidth;
+
+        //initially place in the middle of the field
+        this.x = blockWidth * 2;
+        console.log(this.x, this.y, "hello");
+        //this.x = 0, this.y = 0;
     }
 }
 
