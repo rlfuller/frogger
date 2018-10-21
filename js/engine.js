@@ -179,9 +179,17 @@ class Engine {
      * those sorts of things. It's only called once by the init() method.
      */
     reset() {
-        // noop
-        // console.log("foo", Resources.get(this.player.sprite).height, Resources.get(this.player.sprite).width);
+        // set initial locations for players and enemies
         this.player.setInitialLocation(this.blockWidth, this.blockHeight);
+
+        var x = 0;
+        var y = this.blockHeight - 20;
+        
+        this.allEnemies.forEach(enemy => {
+            enemy.setInitialLocation(x, y);
+            y = y + this.blockHeight;
+        });
+
     }
 
 }
