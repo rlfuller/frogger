@@ -1,6 +1,11 @@
-frontend-nanodegree-arcade-game
-===============================
+# frontend-nanodegree-arcade-game
 
-Students should use this [rubric](https://review.udacity.com/#!/projects/2696458597/rubric) for self-checking their submission. Make sure the functions you write are **object-oriented** - either class functions (like Player and Enemy) or class prototype functions such as Enemy.prototype.checkCollisions, and that the keyword 'this' is used appropriately within your class and class prototype functions to refer to the object the function is called upon. Also be sure that the **readme.md** file is updated with your instructions on both how to 1. Run and 2. Play your arcade game.
+This game is a "frogger-style" web based arcade game. The game engine, html, and resources were provided by [Udacity](https://www.udacity.com) as part of their [Front-End Web Developer Nanodegree program](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001). The code in app.js was provided by myself. 
 
-For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
+## How to start the game
+This is a web based game and will start automatically as soon as you launch index.html. 
+1. Clone or download the repository on github here: [https://github.com/rlfuller/frogger](https://github.com/rlfuller/frogger)
+2. Open the index.html file in a browser
+
+## How to play the game
+The game will start immediately upon loading index.html. The object of the game is to move the player from the grass to the water, avoiding all the enemy bugs. The player can be moved by using your keyboards arrow keys (left, right, up, down). Once the player reaches the water, they will be reset back to the grass. If the player collides with an enemy, the player will be reset back to the grass.

@@ -99,7 +99,7 @@ class Engine {
             let eRight = enemy.x + this.blockWidth - 50;
             let eTop = enemy.y;
             let eBottom = enemy.y + this.blockHeight;
-            console.log("in check collisions");
+
             if (eRight > pLeft && eLeft < pRight && eTop <= pTop && eBottom >= pBottom) {
                 //collision occurred, reset player back to grass
                 this.player.setInitialLocation(this.blockWidth, this.blockHeight);
@@ -201,7 +201,7 @@ class Engine {
      * those sorts of things. It's only called once by the init() method.
      */
     reset() {
-        // set initial locations for players and enemies
+        // set initial location for player
         this.player.setInitialLocation(this.blockWidth, this.blockHeight);
 
         //set inital location for enemies
@@ -210,7 +210,7 @@ class Engine {
        
         this.allEnemies.forEach(enemy => {
             initialRow = Math.floor(Math.random() * 3) + 1;
-            var y = this.blockHeight * initialRow - bottomBuffer;
+            var y = this.blockHeight * initialRow - BOTTOM_BUFFER;
             enemy.setInitialLocation(x, y);
         });
 
