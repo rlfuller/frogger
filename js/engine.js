@@ -14,7 +14,7 @@
  */
 
 class Engine {
-    constructor(canvas, ctx, allEnemies, player) {
+    constructor(canvas, ctx, allEnemies, player, blockWidth, blockHeight) {
     /* Predefine the variables we'll be using within this scope,
      * create the canvas element, grab the 2D context for that canvas
      * set the canvas elements height/width and add it to the DOM.
@@ -25,8 +25,8 @@ class Engine {
         this.lastTime = null;
         this.canvas.width = 505;
         this.canvas.height = 606;
-        this.blockWidth = 101;
-        this.blockHeight = 83;
+        this.blockWidth = blockWidth;
+        this.blockHeight = blockHeight;
         this.allEnemies = allEnemies;
         this.player = player;
 
@@ -86,6 +86,28 @@ class Engine {
         this.main();
     }
 
+
+    checkCollisions(){
+        
+        this.allEnemies.forEach(enemy => {
+            let pLeft = this.player.x;
+            let pRight = this.player.x + this.blockWidth;
+            let pTop = this.player.y;
+            let pBottom = this.player.y + this.blockHeight;
+            
+            let eLeft = enemy.x;
+            let eRight = enemy.x + this.blockWidth - 50;
+            let eTop = enemy.y;
+            let eBottom = enemy.y + this.blockHeight;
+            console.log("in check collisions");
+            if (eRight > pLeft && eLeft < pRight && eTop <= pTop && eBottom >= pBottom) {
+                //collision occurred, reset player back to grass
+                this.player.setInitialLocation(this.blockWidth, this.blockHeight);
+            }
+        });
+
+    }
+
     /* This function is called by main (our game loop) and itself calls all
      * of the functions which may need to update entity's data. Based on how
      * you implement your collision detection (when two entities occupy the
@@ -97,7 +119,7 @@ class Engine {
      */
     update(dt) {
         this.updateEntities(dt);
-        // checkCollisions();
+        this.checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the
@@ -182,12 +204,14 @@ class Engine {
         // set initial locations for players and enemies
         this.player.setInitialLocation(this.blockWidth, this.blockHeight);
 
+        //set inital location for enemies
+        let initialRow;
         var x = 0;
-        var y = this.blockHeight - 20;
-        
+       
         this.allEnemies.forEach(enemy => {
+            initialRow = Math.floor(Math.random() * 3) + 1;
+            var y = this.blockHeight * initialRow - bottomBuffer;
             enemy.setInitialLocation(x, y);
-            y = y + this.blockHeight;
         });
 
     }

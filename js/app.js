@@ -3,6 +3,10 @@ class Sprite {
         this.sprite = sprite;
         this.x = x;
         this.y = y;
+        // this.left = x;
+        // this.right = x + blockWidth;
+        // this.top = y;
+        // this.bottom = y + blockHeight;`
     }
 
     render(ctx){
@@ -13,37 +17,34 @@ class Sprite {
 class Enemy extends Sprite{
     constructor(sprite, x, y) {
         super(sprite, x, y);
+        this.speed = 50; //enemies speed will vary between 50 and 200
     }
 
     update(timeDelta){
-        //this.x = (this.x + 1)  * timeDelta;
-        //this.y;
+        this.x += this.speed * timeDelta;
+        if (this.x >= engine.blockWidth * 5){
+            //reset the speed
+            this.setSpeed();
+
+            //reset the enemy location
+            this.x = -engine.blockWidth;
+            //bring the enemy back to a random stone row between 1 and 3 once it's off the right edge
+            this.y = (engine.blockHeight * (Math.floor(Math.random() * 3) + 1)) - bottomBuffer;
+        }
+    }
+
+    setSpeed(){
+        this.speed = Math.floor(Math.random() * 150) + 50;
     }
 
     setInitialLocation(x, y){
         this.x = x;
         this.y = y;
-        console.log("are we here?");
-        //initially place in the middle of the field
-        // this.x = blockWidth * 2;
-        // console.log(this.x, this.y, "hello");
-
+        this.setSpeed();
     }
 
+
 }
-// read about ctx
-//figure out the dimensions of the ctx canvas
-//figure out the starting position of bug
-//bug needs to start on the bricks, what are the 
-//x,y of the bricks
-//figure out where the water starts
-//maybe get rid of hte curser
-//figure out the timedelta and how to move
-//these stupid sprite things
-//when the bugs get to the edge of thectx, they need
-//to move back tothe beginning of the ctx
-//figure out collisions of bug and player
-//when player dies, he needs to move back to the grass
 
 class Player extends Sprite {
     constructor(sprite, x, y) {
@@ -51,30 +52,30 @@ class Player extends Sprite {
     }
 
     update(){
-        //this.x = (this.x + 1)  * timeDelta;
-        //this.y;
+
     }
 
-    handleInput(keycode){
+    handleInput(keycode, blockWidth, blockHeight){
+    
         //keycodes, up, down, left, right
         if (keycode == "up"){
-            this.y = this.y - engine.blockHeight;
+            this.y = this.y - blockHeight;
             //check if we are in the water, if so, reset to the grass
             if (this.y <= 0){
-                this.y = engine.blockHeight * 5 - 20
+                this.y = blockHeight * 5 - bottomBuffer
             }
         }
 
         if (keycode == "down"){
-            this.y = this.y + engine.blockHeight;
+            this.y = this.y + blockHeight;
             //make sure user cannot go beyond the first row of grass
-            if (this.y >= engine.blockHeight * 6 - engine.blockHeight){
-                this.y = engine.blockHeight * 5 - 20;
+            if (this.y >= blockHeight * 5){
+                this.y = blockHeight * 5 - bottomBuffer;
             }
         }
 
         if (keycode == "left") {
-            this.x = this.x - engine.blockWidth;
+            this.x = this.x - blockWidth;
             //make sure user cannot go to the left of the initial block
             if (this.x < 0){
                 this.x = 0;
@@ -82,11 +83,11 @@ class Player extends Sprite {
         }
 
         if (keycode == "right") {
-            this.x = this.x + engine.blockWidth;
+            this.x = this.x + blockWidth;
             //make sure user cannot go to the right of the end
             //of the 5th column
-            if (this.x >= engine.blockWidth * 5){
-                this.x = engine.blockWidth * 4;
+            if (this.x >= blockWidth * 5){
+                this.x = blockWidth * 4;
             }
         }
     }
@@ -110,19 +111,17 @@ let ctx = canvas.getContext('2d');
 document.body.appendChild(canvas);
 
 //the player and enemies
-let myEnemy = new Enemy("images/enemy-bug.png");
-let myNewEnemy = new Enemy("images/enemy-bug.png");
 let player = new Player("images/char-boy.png");
 let allEnemies = [];
 
 //create enemies, one for each stone row (3)
-for (let i = 0; i < 3; i++){
+for (let i = 0; i < 2; i++){
     allEnemies.push(new Enemy("images/enemy-bug.png"));
 }
 
 //the game engine, which takes a canvas and the elements on 
 //the canvas
-let engine = new Engine(canvas, ctx, allEnemies, player);
+let engine = new Engine(canvas, ctx, allEnemies, player, blockWidth, blockHeight);
 
 //Event listener used by the player
 
@@ -136,5 +135,5 @@ document.addEventListener('keyup', function(e) {
         40: 'down'
     };
 
-    player.handleInput(allowedKeys[e.keyCode]);
+    player.handleInput(allowedKeys[e.keyCode], engine.blockWidth, engine.blockHeight);
 });
